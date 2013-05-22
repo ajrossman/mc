@@ -1,4 +1,5 @@
 class MissionControlCommand
+
   def initialize(cmd)
     @cmd = cmd
   end
