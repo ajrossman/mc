@@ -85,5 +85,26 @@ let(:filepath) {MissionControlCommand.check_in_path}
 
   end
 
+  describe 'for time tracking' do
+
+    it 'time is written to checkin object at checkin' do
+      if FileTest.exists?(filepath)
+        FileUtils.rm(filepath)
+      end
+
+      cmd = MissionControlCommand.new('in')
+      cmd.output
+
+
+      File.open(filepath, 'r').each_line do |line|
+        puts line
+        expect(line.to_i).to be > 1000000
+      end
+
+    end
+
+    it 'the total time at Mission Contol is calculated at checkout'
+
+  end
 
 end

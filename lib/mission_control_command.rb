@@ -2,6 +2,7 @@ class MissionControlCommand
 
   def initialize(cmd)
     @cmd = cmd
+    @check_in_time
   end
 
   def self.check_in_path
@@ -14,7 +15,9 @@ class MissionControlCommand
 
   def check_in
     File.open(self.class.check_in_path, "w") do |f|
-      f.puts 'checkedin'
+      f.puts Time.now.to_i
+      @check_in_time = Time.now
+
     end
   end
 
@@ -23,12 +26,9 @@ class MissionControlCommand
     File.delete(filepath)
   end
 
-
   def check_checked_in
-    cco = File.exists?(self.class.check_in_path)
-    return cco
+    File.exists?(self.class.check_in_path)
   end
-
 
   def output
     output = "no output"
@@ -38,7 +38,7 @@ class MissionControlCommand
         output = 'You are already checked in'
       else
         check_in
-        output ='You are checked in'
+        output = "You are checked in at #{@check_in_time}"
       end
 
     elsif @cmd == 'out'
