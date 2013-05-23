@@ -1,4 +1,5 @@
 class MissionControlCommand
+
   def initialize(cmd)
     @cmd = cmd
   end
@@ -17,36 +18,39 @@ class MissionControlCommand
     end
   end
 
+  def check_out
+    filepath = MissionControlCommand.check_in_path
+    File.delete(filepath)
+  end
+
+
   def check_checked_in
     cco = File.exists?(self.class.check_in_path)
-    puts cco
     return cco
   end
+
 
   def output
     output = "no output"
 
     if @cmd == 'in'
-      check_in
-      output ='You are checked in'
+      if(check_checked_in == true)
+        output = 'You are already checked in'
+      else
+        check_in
+        output ='You are checked in'
+      end
 
     elsif @cmd == 'out'
-      #check to see if already checked in
       if(check_checked_in == false)
-        puts 'You are already checked out'
         output = 'You are already checked out'
       else
-        puts "here"
-        filepath = MissionControlCommand.check_in_path
-        puts filepath
-        g=File.delete(filepath)
-        puts g
-        puts File.exists?(filepath)
+        check_out
         output = 'You are checked out'
       end
 
     else
-      'You are in limbo'
+      'You are in limbo and cannot be saved'
     end
 
     return output
