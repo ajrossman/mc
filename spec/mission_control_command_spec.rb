@@ -8,28 +8,23 @@ describe MissionControlCommand do
 
   describe "#check_in_file_exists?" do
     it "returns true if check in file exists and mc" do
-
       file_path = MissionControlCommand.check_in_path
       File.open(file_path, "w") do |f|
         f.puts 'checkedin'
       end
-
       expect(MissionControlCommand.check_in_file_exists?).to be_true
     end
 
     it "returns false if check in file doesnt exist" do
-
       file_path = MissionControlCommand.check_in_path
-
       if FileTest.exists?(file_path)
         FileUtils.rm(file_path)
       end
-
       expect(File.exists?(file_path)).to_not be_true
-
       expect(MissionControlCommand.check_in_file_exists?).to_not be_true
     end
   end
+
 
   context 'checking in' do
 
@@ -54,18 +49,36 @@ describe MissionControlCommand do
 
   context 'checking out' do
     it 'I get a message that I am already checked out if I was already checked out' do
-      cmd = MissionControlCommand.new('out')
+      if FileTest.exists?(MissionControlCommand.check_in_path)
+        FileUtils.rm(MissionControlCommand.check_in_path)
+      end
+
       cmd = MissionControlCommand.new('out')
       expect(cmd.output).to include('You are already checked out')
     end
 
 
     it 'acknowledges my check out' do
-
+      File.open(MissionControlCommand.check_in_path, "w") do |f|
+        f.puts 'checkedin'
+      end
       cmd = MissionControlCommand.new('out')
+
       expect(cmd.output).to include('You are checked out')
     end
 
+    it 'deletes the file on checkout' do
+      File.open(MissionControlCommand.check_in_path, "w") do |f|
+        f.puts 'checkedin'
+      end
+
+      cmd = MissionControlCommand.new('out')
+      cmd.output
+      puts "here in spec"
+      puts MissionControlCommand.check_in_path
+      puts FileTest.exists?(MissionControlCommand.check_in_path)
+      expect(FileTest.exists?(MissionControlCommand.check_in_path)).to_not be_true
+    end
 
 
     # it 'removes file upon checkout' do

@@ -36,9 +36,14 @@ class MissionControlCommand
         puts 'You are already checked out'
         output = 'You are already checked out'
       else
-        File.delete(self.class.check_in_path)
+        puts "here"
+        filepath = MissionControlCommand.check_in_path
+        puts filepath
+        g=File.delete(filepath)
+        puts g
+        puts File.exists?(filepath)
         output = 'You are checked out'
-       end
+      end
 
     else
       'You are in limbo'
