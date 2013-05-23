@@ -95,7 +95,6 @@ let(:filepath) {MissionControlCommand.check_in_path}
       cmd = MissionControlCommand.new('in')
       cmd.output
 
-
       File.open(filepath, 'r').each_line do |line|
         puts line
         expect(line.to_i).to be > 1000000
@@ -103,7 +102,11 @@ let(:filepath) {MissionControlCommand.check_in_path}
 
     end
 
-    it 'the total time at Mission Contol is calculated at checkout'
+    it 'the total time at Mission Contol is calculated at checkout' do
+      File.open(filepath, 'r').each_line do |line|
+        Time_at_la = Time.now.to_i - line.to_i
+      end
+    end
 
   end
 
